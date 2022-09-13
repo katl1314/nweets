@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { authService } from "fbase";
-import { useEffect } from "react";
+import { authService, firebaseInstance } from "fbase";
 
 const Auth = () => {
     const [email, setEmail] = useState("");
@@ -51,6 +50,32 @@ const Auth = () => {
         setNewAccount(!newAccount);
     };
 
+    // 소셜 로그인
+    const handlerClickSocialLogin = async (event) => {
+        try {
+            const type = event.target.name;
+            // 소셜 로그인을 위해 firebase를 export함.
+
+            let provider;
+            if (type === "google") {
+                // 구글 소셜 로그인을 위한 provider
+                provider = new firebaseInstance.auth.GoogleAuthProvider();
+            } else if (type === "github") {
+                // 깃허브 소셜 로그인을 위한 provider
+                provider = new firebaseInstance.auth.GithubAuthProvider();
+            }
+            // signWithPopup함수를 호출하여 소셜 로그인을 완성한다.
+            // authService.signInWithPopup은 비동기 작업이므로 async-await으로 처리하자.
+            // firebase.auth().signInWithPopup
+            const data = await authService.signInWithPopup(provider);
+            // 로그인을 성공하면 데이터를 반환함.
+            // {operationType: 'signIn', credential: OAuthCredential, additionalUserInfo: GoogleAdditionalUserInfo, user: User}
+            console.log(data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <div>
             <form onSubmit={handlerLogin}>
@@ -83,8 +108,12 @@ const Auth = () => {
                 {newAccount ? "Sign in" : "Create Account"}
             </span>
             <div>
-                <button>Continue with Google</button>
-                <button>Continue with GitHub</button>
+                <button name="google" onClick={handlerClickSocialLogin}>
+                    Continue with Google
+                </button>
+                <button name="github" onClick={handlerClickSocialLogin}>
+                    Continue with GitHub
+                </button>
             </div>
         </div>
     );

@@ -3,25 +3,34 @@ import styled from "styled-components";
 
 const Navigator = () => {
     return (
-        <WrapNav>
-            <Li>
-                <NavLink to="/">Auth</NavLink>
-            </Li>
-            <Li>
-                <NavLink to="/">Home</NavLink>
-            </Li>
-        </WrapNav>
+        <NavWrap>
+            <WrapNavUl>
+                <Li>
+                    <NavLink to="/">Home</NavLink>
+                </Li>
+                <Li>
+                    <NavLink to="/profile">My Profile</NavLink>
+                </Li>
+            </WrapNavUl>
+        </NavWrap>
     );
 };
 
-const WrapNav = styled.ul`
+const NavWrap = styled.div`
+    width: 10%;
+    & > p {
+        text-align: center;
+    }
+`;
+
+const WrapNavUl = styled.ul`
     list-style-type: none;
-    width: 20%;
+    padding: 0px;
+    text-align: center;
 `;
 
 const Li = styled.li`
-    padding: 10px 20px;
-
+    padding: 10px 0px;
     & > a.active {
         color: red;
     }
