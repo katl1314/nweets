@@ -1,9 +1,9 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { Home, Auth, Profile } from "./routes";
-import Navigator from "./components/Navigator";
+import { Home, Auth, Profile } from "routes";
+import Navigator from "components/Navigator";
 import styled from "styled-components";
 
-const Router = ({ isLoggedIn }) => {
+const Router = ({ isLoggedIn, userObj }) => {
     // useState 훅 사용 => 상태 관리
     // isLoggedIn의 상태에 따라 표시되는 컴포넌트는 다르다!
 
@@ -18,7 +18,10 @@ const Router = ({ isLoggedIn }) => {
                             <Route path="/" element={<Auth />} />
                         ) : (
                             <>
-                                <Route path="/" element={<Home />} />
+                                <Route
+                                    path="/"
+                                    element={<Home userObj={userObj} />}
+                                />
                                 <Route path="/profile" element={<Profile />} />
                                 <Route
                                     path="/profile/:id"

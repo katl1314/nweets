@@ -8,6 +8,7 @@ function App() {
     // firebase.auth().currentUser가 null이면 미로그인 상태
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [init, setInit] = useState(false);
+    const [userObj, setUserObj] = useState(null); // 누가 트윗을 작성하였는지 저장을 목적
     // useEffect : 특정한 시점에 콜백함수를 실행하는 Hook
     // useEffect의 두번째 인자를 통해 배열이 공백이면 최초 한번 실행
     // 배열에 state가 정의되어 있으면 state가 update될때 실행함.
@@ -17,6 +18,7 @@ function App() {
             if (user) {
                 // 만약 로그인이 되어 있으면 user정보를 setLoggedIn의 인자로 전달.
                 setLoggedIn(user);
+                setUserObj(user); // 로그인이 되었으면 유저정보를 저장함.
             } else {
                 // 로그인이 되어있지 않으면 false를 인자로 전달.
                 setLoggedIn(false);
@@ -29,7 +31,7 @@ function App() {
         <>
             {!init && <p>Initializing...</p>}
             <WrapApp>
-                <Router isLoggedIn={isLoggedIn} />
+                <Router isLoggedIn={isLoggedIn} userObj={userObj} />
             </WrapApp>
             <Footer />
         </>

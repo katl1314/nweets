@@ -1,11 +1,11 @@
 import { dbService } from "fbase";
 import { useEffect } from "react";
 import { useState } from "react";
-
-const Home = () => {
+import Nweet from "components/Nweet";
+const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState(""); // nweet 입력
     const [nweets, setNweets] = useState([]); // nweet 저장
-    const [isState, setState] = useState(false);
+
     const handlerSubmit = async (event) => {
         event.preventDefault();
         // 파이어베이스 데이터베이스에 값을 전달하는것은 비동기로 처리해야함.
@@ -13,6 +13,7 @@ const Home = () => {
         await dbService.collection("nweets").add({
             text: nweet,
             createAt: Date.now(), // 현재 시간을 밀리세컨드로 반환함.
+            uid: userObj.uid, // 유저 uid
         });
         setNweet("");
     };
@@ -26,29 +27,32 @@ const Home = () => {
     // useEffect(handler, []) : 두번째 인자가 빈배열이면 처음 렌더링시 발생함.
     useEffect(() => {
         // useEffect훅의 콜백함수는 async-await를 사용할 수 없음.
-        getNweets();
+        // firebase의 firestore에 저장된 데이터를 실시간으로 가져온다.
+        // firebase.firestore().collection(컬렉션명).orderBy(fieldName, orderByType).onSnapshot(callback)
+        dbService
+            .collection("nweets")
+            .orderBy("createAt", "desc") // firebase 컬렉션 조회시 정렬 기준 및 정렬 방식을 설정한다.
+            .onSnapshot((snapshot) => {
+                // onSnapshot은 firebase에 데이터가 갱신되면 자동으로 호출함.
+                // 반환한 배열을 가지고 다시 갱신한다.
+                const nweetsArray = snapshot.docs.map((document) => {
+                    const newObject = { ...document.data(), id: document.id };
+                    return newObject;
+                });
+                setNweets(nweetsArray);
+            });
     }, []);
-
-    useEffect(() => {
-        console.log(isState);
-    }, [isState]);
-
-    const getNweets = async () => {
-        const data = await dbService.collection("nweets").get();
-        data.forEach((nweet) => {
-            // 실제 데이터 nweet.data()
-            const newNweet = { ...nweet.data(), id: nweet.id };
-            // prev : 이전 nweets 배열 데이터
-            // 새로운 데이터를 배열 앞에 추가한다.
-            setNweets((prev) => [newNweet, ...prev]);
-        });
-    };
-    const liNweets = nweets.map(({ text, createAt, id }) => {
+    const liNweets = nweets.map(({ text, createAt, id, uid }) => {
         return (
-            <li key={id}>
-                <div>텍스트:{text}</div>
-                <div>생성날짜:{new Date(createAt).toLocaleString()}</div>
-            </li>
+            <Nweet
+                key={id}
+                nweetObj={{ text, createAt }}
+                isOwner={userObj.uid === uid}
+                children={[
+                    <button key="delete">Delete Nweet</button>,
+                    <button key="edit">Edit Nweet</button>,
+                ]}
+            />
         );
     });
     return (
@@ -63,14 +67,7 @@ const Home = () => {
                 />
                 <input type="submit" value="Nweet" />
             </form>
-            <button
-                onClick={() => {
-                    setState((prev) => !prev);
-                }}
-            >
-                테스트
-            </button>
-            <ul>{liNweets}</ul>
+            <div>{liNweets}</div>
         </div>
     );
 };
