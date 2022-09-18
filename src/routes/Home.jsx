@@ -24,7 +24,7 @@ const Home = ({ userObj }) => {
         setNweet(event.target.value);
     };
 
-    // useEffect(handler, []) : 두번째 인자가 빈배열이면 처음 렌더링시 발생함.
+    // 두번째 인자가 빈배열이면 처음 렌더링시 발생함.
     useEffect(() => {
         // useEffect훅의 콜백함수는 async-await를 사용할 수 없음.
         // firebase의 firestore에 저장된 데이터를 실시간으로 가져온다.
@@ -35,6 +35,7 @@ const Home = ({ userObj }) => {
             .onSnapshot((snapshot) => {
                 // onSnapshot은 firebase에 데이터가 갱신되면 자동으로 호출함.
                 // 반환한 배열을 가지고 다시 갱신한다.
+                // snapshot.docs는 firestore에 저장된 데이터를 배열 형태로...
                 const nweetsArray = snapshot.docs.map((document) => {
                     const newObject = { ...document.data(), id: document.id };
                     return newObject;
@@ -46,12 +47,8 @@ const Home = ({ userObj }) => {
         return (
             <Nweet
                 key={id}
-                nweetObj={{ text, createAt }}
+                nweetObj={{ text, createAt, id, uid }}
                 isOwner={userObj.uid === uid}
-                children={[
-                    <button key="delete">Delete Nweet</button>,
-                    <button key="edit">Edit Nweet</button>,
-                ]}
             />
         );
     });

@@ -70,7 +70,7 @@ const Auth = () => {
             const data = await authService.signInWithPopup(provider);
             // 로그인을 성공하면 데이터를 반환함.
             // {operationType: 'signIn', credential: OAuthCredential, additionalUserInfo: GoogleAdditionalUserInfo, user: User}
-            console.log(data);
+            // console.log(data);
         } catch (err) {
             console.error(err);
         }

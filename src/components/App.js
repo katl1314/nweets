@@ -27,6 +27,7 @@ function App() {
             setInit(true); // 처음 useEffect가 발생하면 setInit에 true전달.
         });
     }, []);
+
     return (
         <>
             {!init && <p>Initializing...</p>}
