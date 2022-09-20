@@ -25,7 +25,8 @@ const Nweet = ({ nweetObj, isOwner }) => {
         setNewNweet(event.target.value);
     };
 
-    const handlerSaveEdit = async () => {
+    const handlerSaveEdit = async (event) => {
+        event.preventDefault(); // 이벤트 기본 동작 제어
         // 수정 사항 변경
         if (window.confirm("정말로 저장하시겠습니까?")) {
             const updateData = {
@@ -47,11 +48,9 @@ const Nweet = ({ nweetObj, isOwner }) => {
                     <button key="delete" onClick={handlerDeleteNweet}>
                         Delete Nweet
                     </button>
-                    ,
                     <button key="edit" onClick={handlerEditNweet}>
                         Edit Nweet
                     </button>
-                    ,
                 </div>
             )}
             {isEditing && (
@@ -67,15 +66,18 @@ const Nweet = ({ nweetObj, isOwner }) => {
 
 const EditForm = ({ newNweet, handlerChange, handlerSaveEdit }) => {
     // input에 required를 설정하여 해당 필드는 필수로 입력해야 하도록 설정함.
+    // required를 사용하려면 form으로 감싸야한다.
     return (
         <div>
-            <input
-                type="text"
-                value={newNweet}
-                onChange={handlerChange}
-                required
-            ></input>
-            <button onClick={handlerSaveEdit}>저장</button>
+            <form onSubmit={handlerSaveEdit}>
+                <input
+                    type="text"
+                    value={newNweet}
+                    onChange={handlerChange}
+                    required
+                ></input>
+                <button type="submit">저장</button>
+            </form>
         </div>
     );
 };
