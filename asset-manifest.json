@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/nweets/static/js/main.a134f24a.js",
+    "index.html": "/nweets/index.html",
+    "main.a134f24a.js.map": "/nweets/static/js/main.a134f24a.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.a134f24a.js"
+  ]
+}
