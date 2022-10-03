@@ -14,19 +14,21 @@ const NweetFactory = ({ userObj: { uid, displayName } }) => {
         // 파이어베이스 데이터베이스에 값을 전달하는것은 비동기로 처리해야함. (서버 통신)
         // firebase.firestore().collection().add는 promise객체를 반환함.
         // firebase.storage().ref().child함수를 사용하게 되면 폴더, 파일이름을 설정할 수 있다. (base64)
-        const uuid = uuidv4();
-        // 파일 업로드
-        const attachmentRef = storageService.ref().child(`${uid}/${uuid}`);
-        const response = await attachmentRef.putString(attachment, "data_url");
+        let data = { nweet, uid, displayName, attachmentUrl: "" };
+        if (attachment) {
+            // 파일 업로드
+            const uuid = uuidv4();
+            const attachmentRef = storageService.ref().child(`${uid}/${uuid}`);
+            const response = await attachmentRef.putString(
+                attachment,
+                "data_url"
+            );
 
-        // storage에 저장된 파일을 불러오기
-        const attachmentUrl = await response.ref.getDownloadURL(); // image url
-        await DatabaseService.addNweet({
-            nweet,
-            uid,
-            attachmentUrl,
-            displayName,
-        });
+            // storage에 저장된 파일을 불러오기
+            const attachmentUrl = await response.ref.getDownloadURL(); // image url
+            data = { ...data, attachmentUrl: attachmentUrl };
+        }
+        await DatabaseService.addNweet(data);
 
         initState();
     };

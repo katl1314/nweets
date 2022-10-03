@@ -2,3 +2,9 @@
     // useEffect의 두번째 인자를 통해 배열이 공백이면 최초 한번 실행
     // 배열에 state가 정의되어 있으면 state가 update될때 실행함.
     // const { id } = useParams(); // Optional Param사용시 해당 값을 반환한다. useParams
+
+    // 배포
+    // npm run build
+
+    // gh-pages : 깃허브 페이지 자동 배포 (설치해야함.)
+    // pgh-pages -d build
