@@ -3,13 +3,13 @@ import { Home, Auth, Profile } from "routes";
 import Navigator from "components/Navigator";
 import styled from "styled-components";
 
-const Router = ({ isLoggedIn, userObj }) => {
+const Router = ({ isLoggedIn, userObj, refreshUser }) => {
     // useState 훅 사용 => 상태 관리
     // isLoggedIn의 상태에 따라 표시되는 컴포넌트는 다르다!
 
     return (
         <HashRouter>
-            {isLoggedIn && <Navigator children={isLoggedIn.email} />}
+            {isLoggedIn && <Navigator userObj={userObj} />}
             <View
                 children={
                     <Routes>
@@ -22,11 +22,19 @@ const Router = ({ isLoggedIn, userObj }) => {
                                     path="/"
                                     element={<Home userObj={userObj} />}
                                 />
-                                <Route path="/profile" element={<Profile />} />
                                 <Route
+                                    path="/profile"
+                                    element={
+                                        <Profile
+                                            userObj={userObj}
+                                            refreshUser={refreshUser}
+                                        />
+                                    }
+                                />
+                                {/* <Route
                                     path="/profile/:id"
                                     element={<Profile />}
-                                />
+                                /> */}
                             </>
                         )}
                     </Routes>

@@ -1,15 +1,25 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import { useState } from "react";
+import styled from "styled-components";
 
-const Nweet = ({ nweetObj, isOwner }) => {
+const Nweet = ({
+    nweetObj: { text, createAt, id, attachmentUrl, displayName },
+    isOwner,
+}) => {
     const [isEditing, setEditing] = useState(false); // 수정 여부
-    const [newNweet, setNewNweet] = useState(nweetObj.text); // 갱신 값. (기존값이 보이기 위함.)
+    const [newNweet, setNewNweet] = useState(text); // 갱신 값. (기존값이 보이기 위함.)
     // isOwner: 해당 아이디로 작성된 게시물만 버튼이 표시됨.
     const handlerDeleteNweet = async () => {
         // 트윗 삭제
         // firebase.firestore().doc(`컬렉션경로/id`).delete();
+        // firebase.storage().refFromURL(image url).delete();
         if (window.confirm("정말 삭제하겠습니까?")) {
-            await dbService.doc(`/nweets/${nweetObj.id}`).delete();
+            // 데이터베이스 삭제
+            await dbService.doc(`/nweets/${id}`).delete();
+            if (attachmentUrl) {
+                // 특정 스토리지 경로의 파일 삭제 (불필요한 자료가 쌓이면 과금요소.)
+                await storageService.refFromURL(attachmentUrl).delete();
+            }
         }
     };
 
@@ -31,18 +41,32 @@ const Nweet = ({ nweetObj, isOwner }) => {
         if (window.confirm("정말로 저장하시겠습니까?")) {
             const updateData = {
                 text: newNweet,
-                createAt: new Date(nweetObj.createAt).toLocaleDateString(),
-                uid: nweetObj.uid,
+                createAt: new Date(createAt).toLocaleDateString(),
             };
 
-            await dbService.doc(`/nweets/${nweetObj.id}`).update(updateData);
+            await dbService.doc(`/nweets/${id}`).update(updateData);
             toggleEditingForm();
         }
     };
     return (
-        <div style={{ margin: "10px" }}>
-            <h4 style={{ margin: 0 }}>내용: {nweetObj.text}</h4>
-            <span>작성일: {new Date(nweetObj.createAt).toLocaleString()}</span>
+        <NweetWrap>
+            <div>
+                <div>
+                    <img
+                        src={attachmentUrl}
+                        alt="이미지"
+                        width={50}
+                        height={50}
+                    ></img>
+                </div>
+                <div>
+                    <h4 style={{ margin: 0 }}>내용: {text}</h4>
+                    <p style={{ margin: 0 }}>
+                        작성일: {new Date(createAt).toLocaleString()}
+                    </p>
+                    <p style={{ margin: 0 }}>작성자: {displayName}</p>
+                </div>
+            </div>
             {isOwner && (
                 <div>
                     <button key="delete" onClick={handlerDeleteNweet}>
@@ -60,7 +84,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
                     handlerSaveEdit={handlerSaveEdit}
                 />
             )}
-        </div>
+        </NweetWrap>
     );
 };
 
@@ -81,5 +105,12 @@ const EditForm = ({ newNweet, handlerChange, handlerSaveEdit }) => {
         </div>
     );
 };
+
+const NweetWrap = styled.div`
+    margin: 10px;
+    & > div {
+        display: flex;
+    }
+`;
 
 export default Nweet;

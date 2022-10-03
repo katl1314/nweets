@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-const Navigator = () => {
+const Navigator = ({ userObj: { displayName, photoURL } }) => {
     return (
         <NavWrap>
             <WrapNavUl>
@@ -9,7 +9,12 @@ const Navigator = () => {
                     <NavLink to="/">Home</NavLink>
                 </Li>
                 <Li>
-                    <NavLink to="/profile">My Profile</NavLink>
+                    <NavLink to="/profile">
+                        {photoURL && (
+                            <img src={photoURL} alt="profile image"></img>
+                        )}
+                        <div>{displayName}'s Profile</div>
+                    </NavLink>
                 </Li>
             </WrapNavUl>
         </NavWrap>
