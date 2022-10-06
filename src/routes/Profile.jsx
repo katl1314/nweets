@@ -80,6 +80,12 @@ const Profile = ({ userObj, refreshUser }) => {
             Profile
             <div>
                 <form id="form" onSubmit={updateProfile}>
+                    <img
+                        src={userObj.photoURL}
+                        alt="프로필이미지"
+                        width={50}
+                        height={50}
+                    />
                     <input
                         type="text"
                         name="displayName"

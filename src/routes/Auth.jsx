@@ -1,5 +1,12 @@
 import { authService, firebaseInstance } from "fbase";
 import AuthForm from "components/factory/AuthForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faTwitter,
+    faGoogle,
+    faGithub,
+} from "@fortawesome/free-brands-svg-icons"; // google, github 아이콘
+
 const Auth = () => {
     // 소셜 로그인
     const handlerClickSocialLogin = async (event) => {
@@ -27,17 +34,31 @@ const Auth = () => {
     };
 
     return (
-        <>
+        <div className="authContainer">
+            <FontAwesomeIcon
+                icon={faTwitter}
+                size="4x"
+                color="#04AAFF"
+                style={{ marginBottom: 30 }}
+            />
             <AuthForm />
-            <div>
-                <button name="google" onClick={handlerClickSocialLogin}>
-                    Continue with Google
+            <div className="authBtns">
+                <button
+                    name="google"
+                    className="authBtn"
+                    onClick={handlerClickSocialLogin}
+                >
+                    <FontAwesomeIcon size="xl" icon={faGoogle} />
                 </button>
-                <button name="github" onClick={handlerClickSocialLogin}>
-                    Continue with GitHub
+                <button
+                    name="github"
+                    className="authBtn"
+                    onClick={handlerClickSocialLogin}
+                >
+                    <FontAwesomeIcon size="xl" icon={faGithub} />
                 </button>
             </div>
-        </>
+        </div>
     );
 };
 

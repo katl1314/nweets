@@ -38,9 +38,9 @@ const Home = ({ userObj: { uid, displayName } }) => {
     );
 
     return (
-        <div>
+        <div className="container">
             <NweetFactory userObj={{ uid, displayName }} />
-            <div>{liNweets}</div>
+            <div style={{ marginTop: "30px" }}>{liNweets}</div>
         </div>
     );
 };

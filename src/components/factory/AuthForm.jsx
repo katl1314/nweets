@@ -20,7 +20,6 @@ const AuthForm = () => {
         // event.target중 id가 email, password인 DOM 추출
         event.preventDefault(); // 이벤트 기본 동작 제어
         try {
-            let data;
             const email = event.target.email.value;
             const password = event.target.password.value;
             if (newAccount) {
@@ -47,8 +46,7 @@ const AuthForm = () => {
 
     return (
         <>
-            <form onSubmit={handlerLogin}>
-                <h1 style={{ fontSize: "30px", fontWeight: "bold" }}>Login</h1>
+            <form onSubmit={handlerLogin} className="container">
                 <div>
                     <input
                         type="text"
@@ -57,6 +55,7 @@ const AuthForm = () => {
                         placeholder="email"
                         value={email}
                         onChange={handlerChange}
+                        className="authInput"
                     />
                     <input
                         type="password"
@@ -65,17 +64,21 @@ const AuthForm = () => {
                         placeholder="password"
                         value={password}
                         onChange={handlerChange}
+                        className="authInput"
                     />
+                </div>
+                <div>
                     <input
                         type="submit"
                         value={newAccount ? "Create Account" : "Login"}
+                        className="authSubmit authInput"
                     />
                 </div>
-                {error && <p>{error}</p>}
+                {error && <p className="authError">{error}</p>}
+                <span onClick={handlerToggle} className="authSwitch">
+                    {newAccount ? "Sign in" : "Create Account"}
+                </span>
             </form>
-            <span onClick={handlerToggle}>
-                {newAccount ? "Sign in" : "Create Account"}
-            </span>
         </>
     );
 };

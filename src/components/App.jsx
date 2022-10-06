@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState, createContext, useEffect } from "react";
 import * as AuthService from "service/AuthService";
 import { authService } from "fbase";
+
 export const MyContext = createContext();
 function App() {
     // firebase.auth().currentUser가 null이면 미로그인 상태

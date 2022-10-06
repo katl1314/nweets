@@ -5,11 +5,12 @@ export const authStateChanged = (setLoggedIn, setUserObj, setInit) => {
         if (user) {
             // 만약 로그인이 되어 있으면 user정보를 setLoggedIn의 인자로 전달. => 사이즈를 줄이기 위해 boolean타입으로 대체함.
             setLoggedIn(true);
-            const { uid, displayName } = user;
+            const { uid, displayName, photoURL } = user;
             // 리액트는 state와 props의 내용물이 많으면 조그만 변화를 인식하지 못하기 때문에, 값을 최대한 줄여보자.
             setUserObj({
                 uid,
                 displayName,
+                photoURL,
                 updateProfile: (args) => user.updateProfile(args),
             }); // 로그인이 되었으면 유저정보를 저장함.
         } else {
