@@ -8,15 +8,11 @@ const Profile = ({ userObj, refreshUser }) => {
     const navigate = useNavigate();
     const [myNweet, setMyNweet] = useState([]);
     const [displayName, setDisplayName] = useState(userObj.displayName);
-    const [temp] = useState(false);
-    
     useEffect(() => {
         // 렌더링 이후 발생할 함수
-        function getMyNweet2() {
-            getMyNweet();
-        }
-        getMyNweet2();
-    }, [temp]);
+        getMyNweet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const getMyNweet = async () => {
         const { uid } = userObj;
