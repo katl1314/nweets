@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid"; // firebase storage는 구분하기 위한 id를 자동생성하지 않기 때문에 uuid를 이용하자.
 import { storageService } from "fbase";
 import { DatabaseService } from "service/NweetsFactory";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const NweetFactory = ({ userObj: { uid, displayName } }) => {
     const [nweet, setNweet] = useState(""); // nweet
@@ -76,40 +78,79 @@ const NweetFactory = ({ userObj: { uid, displayName } }) => {
 
     return (
         <div>
-            <form onSubmit={handlerSubmit}>
-                <div>
+            <form onSubmit={handlerSubmit} className="factoryForm">
+                <div className="factoryInput__container">
                     <input
                         type="text"
                         value={nweet}
+                        className="factoryInput__input"
                         onChange={handlerChangeNweet} // change시 이벤트 핸들로 호출.
                         placeholder="What's on your mind?" // hint
                         maxLength={120} // 최대 120자까지 입력함.
                     />
-                    {/* input file type : 파일 업로드가능
-                    accept는 업로드할 파일 타입을 설정할 수 있음.
-                 */}
+                    <input
+                        type="submit"
+                        value="&rarr;"
+                        className="factoryInput__arrow"
+                    />
+                </div>
+                <div style={{ margin: "10px 0" }}>
+                    <label
+                        htmlFor="uploadImage"
+                        className="factoryInput__label"
+                    >
+                        <span>Add Photo</span>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </label>
                     <input
                         type="file"
                         ref={fileRef}
                         name="uploadImage"
                         id="uploadImage"
-                        accept="image/*"
+                        accept="image/*" // 허용할 파일 형태
                         onChange={handlerFileChange}
+                        style={{ display: "none" }}
                     />
                 </div>
-                {/* src 어프리뷰트에 이미지파일 base64로 인코딩된 데이터도 가능 */}
-                <div>
-                    <img
-                        src={attachment}
-                        alt="업로드 이미지"
-                        width="100"
-                        height="100"
-                    />
-                    <button type="button" onClick={handlerImageClear}>
-                        clear
-                    </button>
+                <div style={{ margin: "10px 0" }}>
+                    {/* src 어프리뷰트에 이미지파일 base64로 인코딩된 데이터도 가능 */}
+                    {attachment ? (
+                        <img
+                            src={attachment}
+                            alt="업로드 이미지"
+                            width="100"
+                            height="100"
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                                border: "1px solid",
+                            }}
+                        >
+                            <span
+                                style={{
+                                    display: "inline-block",
+                                    margin: "42% auto",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    boxSizing: "border-box",
+                                }}
+                            >
+                                No Image
+                            </span>
+                        </div>
+                    )}
+
+                    <div
+                        className="factoryForm__clear"
+                        onClick={handlerImageClear}
+                    >
+                        <span>clear</span>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
                 </div>
-                <input type="submit" value="Nweet" />
             </form>
         </div>
     );
