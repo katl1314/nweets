@@ -9,6 +9,7 @@ const Profile = ({ userObj, refreshUser }) => {
     const [myNweet, setMyNweet] = useState([]);
     const [displayName, setDisplayName] = useState(userObj.displayName);
     const [temp] = useState(false);
+    
     useEffect(() => {
         // 렌더링 이후 발생할 함수
         getMyNweet();
