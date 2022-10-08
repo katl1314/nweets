@@ -11,7 +11,7 @@ const Profile = ({ userObj, refreshUser }) => {
     useEffect(() => {
         // 렌더링 이후 발생할 함수
         getMyNweet();
-    }, []);
+    }, [displayName]);
 
     const getMyNweet = async () => {
         const { uid } = userObj;
