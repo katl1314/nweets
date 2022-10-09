@@ -6,7 +6,6 @@ import styled from "styled-components";
 const Router = ({ isLoggedIn, userObj, refreshUser }) => {
     // useState 훅 사용 => 상태 관리
     // isLoggedIn의 상태에 따라 표시되는 컴포넌트는 다르다!
-
     return (
         <HashRouter>
             {isLoggedIn && <Navigator userObj={userObj} />}

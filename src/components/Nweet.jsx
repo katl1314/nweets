@@ -53,12 +53,14 @@ const Nweet = ({
         <NweetWrap>
             <div>
                 <div>
-                    <img
-                        src={attachmentUrl}
-                        alt="이미지"
-                        width={50}
-                        height={50}
-                    ></img>
+                    {attachmentUrl && (
+                        <img
+                            src={attachmentUrl}
+                            alt="이미지"
+                            width={50}
+                            height={50}
+                        ></img>
+                    )}
                 </div>
                 <div>
                     <h4 style={{ margin: 0 }}>내용: {text}</h4>

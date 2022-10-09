@@ -3,20 +3,21 @@ import styled from "styled-components";
 import { useState, createContext, useEffect } from "react";
 import * as AuthService from "service/AuthService";
 import { authService } from "fbase";
+import useUser from "hooks/useUser";
 
 export const MyContext = createContext();
 function App() {
     // firebase.auth().currentUser가 null이면 미로그인 상태
-    const [isLoggedIn, setLoggedIn] = useState(false);
     const [init, setInit] = useState(false);
-    const [userObj, setUserObj] = useState(null); // 누가 트윗을 작성하였는지 저장을 목적
+    const [{ isLoggedIn, userObj }, handlerLoggedIn, handlerUserObj] = useUser();
 
     const refreshUser = () => {
         // firebase에 저장된 사용자 정보는 firebase.auth().currentUser를 통해 반환가능.
-        const { uid, displayName } = authService.currentUser;
-        setUserObj({
+        const { uid, displayName, photoURL } = authService.currentUser;
+        handlerUserObj({
             uid,
             displayName,
+            photoURL,
             updateProfile: (args) =>
                 authService.currentUser.updateProfile(args),
         });
@@ -24,7 +25,7 @@ function App() {
 
     useEffect(() => {
         // 로그인 완료 여부 authService.currentUser를 통해 확인 가능.
-        AuthService.authStateChanged(setLoggedIn, setUserObj, setInit);
+        AuthService.authStateChanged(handlerLoggedIn, handlerUserObj, setInit);
     }, []);
 
     return (

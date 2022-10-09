@@ -17,5 +17,5 @@ export const findNweets = (collection, callback) => {
     dbService
         .collection(collection)
         .orderBy("createAt", "desc") // firebase 컬렉션 조회시 정렬 기준 및 정렬 방식을 설정한다.
-        .onSnapshot((snapshot) => callback(snapshot));
+        .onSnapshot((snapshot) => callback(snapshot)); // onSnapshot이벤트는 실시간으로 서버에 변경된 데이터를 조회함.
 };
